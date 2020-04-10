@@ -10,7 +10,7 @@ app.use(cors());
 const repositories = [];
 
 app.get("/repositories", (req, res) => {
-  return res.json(repositories)
+   return res.json(repositories)
 });
 
 app.post("/repositories", (req, res) => {
@@ -43,13 +43,17 @@ app.put("/repositories/:id", (req, res) => {
 });
 
 app.delete("/repositories/:id", (req, res) => {
-  const { id } = req.params
+   const { id } = req.params
 
-  const repositoryIndex = repositories.findIndex(repository => repository.id == id)
+   const repositoryIndex = repositories.findIndex(repository => repository.id == id)
 
-  repositories.splice(repositoryIndex, 1)
+   if(repositoryIndex == -1) {
+      return res.status(400).json({error: "Id does not exist"})
+   }
 
-  return res.status(204).send()
+   repositories.splice(repositoryIndex, 1)
+
+   return res.status(204).send()
 });
 
 app.post("/repositories/:id/like", (req, res) => {
@@ -57,6 +61,10 @@ app.post("/repositories/:id/like", (req, res) => {
 
    const repositoryIndex = repositories.findIndex(repository => repository.id == id)
 
+   if(repositoryIndex == -1) {
+      return res.status(400).json({error: "Id does not exist"})
+   }
+   
    repositories[repositoryIndex].likes++
 
    return res.json(repositories[repositoryIndex])
