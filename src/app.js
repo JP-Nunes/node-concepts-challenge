@@ -29,7 +29,13 @@ app.put("/repositories/:id", (req, res) => {
 
    const repositoryIndex = repositories.findIndex(repository => repository.id == id)
 
-   const repository = { title, url, techs }
+   if(repositoryIndex == -1) {
+      return res.status(400).json({error: "Id does not exist"})
+   }
+
+   const likes = repositories[repositoryIndex].likes
+
+   const repository = { id, title, url, techs, likes }
 
    repositories[repositoryIndex] = repository
 
@@ -48,15 +54,12 @@ app.delete("/repositories/:id", (req, res) => {
 
 app.post("/repositories/:id/like", (req, res) => {
    const { id } = req.params
-   const { like } = req.body
 
    const repositoryIndex = repositories.findIndex(repository => repository.id == id)
 
-   repositories[repositoryIndex].likes += like
+   repositories[repositoryIndex].likes++
 
-   const repository = repositories[repositoryIndex]
-
-   return res.json(repository)
+   return res.json(repositories[repositoryIndex])
 });
 
 module.exports = app;
