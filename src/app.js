@@ -8,7 +8,6 @@ app.use(express.json());
 app.use(cors());
 
 const repositories = [];
-const likes = []
 
 app.get("/repositories", (req, res) => {
   return res.json(repositories)
@@ -17,7 +16,7 @@ app.get("/repositories", (req, res) => {
 app.post("/repositories", (req, res) => {
    const { title, url, techs } = req.body
 
-   const repository = { id: uuid(), title, url, techs, likes }
+   const repository = { id: uuid(), title, url, techs, likes: 0 }
 
    repositories.push(repository)
 
@@ -25,7 +24,16 @@ app.post("/repositories", (req, res) => {
 });
 
 app.put("/repositories/:id", (req, res) => {
-  // TODO
+   const { id } = req.params
+   const { title, url, techs } = req.body
+
+   const repositoryIndex = repositories.findIndex(repository => repository.id == id)
+
+   const repository = { title, url, techs }
+
+   repositories[repositoryIndex] = repository
+
+   return res.json(repository)
 });
 
 app.delete("/repositories/:id", (req, res) => {
