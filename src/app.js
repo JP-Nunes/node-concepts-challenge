@@ -11,7 +11,7 @@ const repositories = [];
 const likes = []
 
 app.get("/repositories", (req, res) => {
-  
+  return res.json(repositories)
 });
 
 app.post("/repositories", (req, res) => {
