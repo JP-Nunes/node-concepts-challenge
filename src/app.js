@@ -37,11 +37,26 @@ app.put("/repositories/:id", (req, res) => {
 });
 
 app.delete("/repositories/:id", (req, res) => {
-  // TODO
+  const { id } = req.params
+
+  const repositoryIndex = repositories.findIndex(repository => repository.id == id)
+
+  repositories.splice(repositoryIndex, 1)
+
+  return res.status(204).send()
 });
 
 app.post("/repositories/:id/like", (req, res) => {
-  // TODO
+   const { id } = req.params
+   const { like } = req.body
+
+   const repositoryIndex = repositories.findIndex(repository => repository.id == id)
+
+   repositories[repositoryIndex].likes += like
+
+   const repository = repositories[repositoryIndex]
+
+   return res.json(repository)
 });
 
 module.exports = app;
